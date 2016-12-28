@@ -1,0 +1,54 @@
+<?xml version="1.0"?>
+<project name="Struts Practice 2" default="BuildCode" basedir=".">
+<!-- Global variable declarations for the build file -->
+	<property name="tomcat.home" value="D:\apache-tomcat-8.5.8\webapps\Practice2" />
+	<property name="src.dir" value="src"/>
+	<property name="lib.dir" value="WebContent\WEB-INF\lib"/>
+	<property name="build.dir" value="WebContent/WEB-INF/classes"/>
+	<property name="webcontent.dir" value="WebContent"/>
+
+<!-- Delete entire contents under build folder -->
+	<target name="cleanBuild">
+		<delete includeemptydirs="true">
+			<fileset dir="${build.dir}" includes="**/*" />
+		</delete>
+	</target>
+	
+	<path id="compile.classpath">
+		<fileset dir="${lib.dir}">
+	      	<include name="*.jar"/>
+	    </fileset>
+		<pathelement path="D:\apache-tomcat-8.5.8\lib\servlet-api.jar"/>
+	</path>
+	
+<!-- Compiling the code -->
+	<target name="Compile" depends="cleanBuild">
+		<javac includeantruntime="false" compiler="javac1.8" source="1.8" target="1.8" srcdir="${src.dir}" destdir="${build.dir}">
+			<classpath refid="compile.classpath" />
+		</javac>
+	</target>
+	
+<!-- Deploy code -->	
+	<target name="BuildCode" depends="Compile">
+		<copy todir="${tomcat.home}" >
+			<fileset dir="${webcontent.dir}" includes="**/*"/>
+		</copy>
+		<copy todir="${tomcat.home}/WEB-INF/classes">
+			<fileset dir="${build.dir}" includes="**/*"/>
+		</copy>
+		<copy todir="${tomcat.home}/WEB-INF/classes">
+			<fileset dir="${src.dir}" includes="**/*.xml"/>
+			<fileset dir="${src.dir}" includes="**/*.properties"/>
+		</copy>
+	</target>
+	
+<!-- Build a WAR file -->	
+	<target name="war" depends="BuildCode">
+		<war warfile="C:\Rakesh\${warFileName}">
+			<fileset dir="${webcontent.dir}" />
+			<manifest>
+				<attribute name="Built-By" value="Rakesh Diwakar" />
+			</manifest>
+		</war>
+	</target>
+</project>

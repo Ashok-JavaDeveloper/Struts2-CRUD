@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 2.0//EN" "http://struts.apache.org/dtds/struts-2.0.dtd">
+<struts>
+	<constant name="struts.action.extension" value="," />
+	<constant name="struts.multipart.maxSize" value="4194304" />
+
+	<!-- Including module specific configuration files starts -->
+	<package name="common" namespace="/" extends="struts-default">
+		<!-- Interceptors definition -->
+		<interceptors>
+			<interceptor name="mylogging" class="com.init.MyLoggingInterceptor"></interceptor>
+
+			<interceptor-stack name="loggingStack">
+				<interceptor-ref name="mylogging" />
+				<interceptor-ref name="defaultStack" />
+			</interceptor-stack>
+		</interceptors>
+
+		<default-interceptor-ref name="loggingStack"></default-interceptor-ref>
+
+		<default-action-ref name="LoginPage" />
+		<global-results>
+			<result name="error">/error.jsp</result>
+			<result name="invalid.token">/error.jsp</result>
+		</global-results>
+		<global-exception-mappings>
+			<exception-mapping exception="java.lang.Exception"
+				result="error" />
+		</global-exception-mappings>
+
+	</package>
+
+	<package name="login" namespace="/" extends="struts-default">
+
+		<action name="LoginPage" method="loginPage" class="com.user.web.UserAction">
+			<result name="success">/login.jsp</result>
+		</action>
+
+		<action name="Login" method="validateUser" class="com.user.web.UserAction">
+			<result name="success" type="redirectAction">${redirectURL}</result>
+		</action>
+		
+		<action name="Logout" method="logout" class="com.user.web.InvalidateUser">
+			<result name="success" type="redirectAction">LoginPage</result>
+		</action>
+	</package>
+
+	<package name="project" namespace="/" extends="common">
+
+		<action name="Dashboard" method="dashboard"
+			class="com.employee.web.EmployeeAction">
+			<result name="success">/dashboard.jsp</result>
+		</action>
+
+		<action name="ViewEmployee" method="viewEmployee"
+			class="com.employee.web.EmployeeAction">
+			<result name="success">/employeeList.jsp</result>
+		</action>
+
+		<action name="AddEmployee" method="addEmployee"
+			class="com.employee.web.EmployeeAction">
+			<result name="success">/employeeAddEdit.jsp</result>
+		</action>
+
+		<action name="SaveEmployee" method="saveEmployee"
+			class="com.employee.web.EmployeeAction">
+			<result name="success" type="redirectAction">ViewEmployee</result>
+		</action>
+
+		<action name="EditEmployee/*" method="editEmployee"
+			class="com.employee.web.EmployeeAction">
+			<param name="employeeId">{1}</param>
+			<result name="success">/employeeAddEdit.jsp</result>
+		</action>
+
+		<action name="DeleteEmployee/*" method="deleteEmployee"
+			class="com.employee.web.EmployeeAction">
+			<param name="employeeId">{1}</param>
+			<result name="success" type="redirectAction">ViewEmployee</result>
+		</action>
+
+		<action name="DetailEmployee/*" method="detailEmployee"
+			class="com.employee.web.EmployeeAction">
+			<param name="employeeId">{1}</param>
+			<result name="success">/employeeDetails.jsp</result>
+		</action>
+
+
+
+	</package>
+</struts>

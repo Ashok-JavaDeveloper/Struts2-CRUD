@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config 3.0//EN" "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+
+	<typeAliases>
+		<typeAlias type="com.foundation.domain.Employee" alias="Employee"></typeAlias>
+		<typeAlias type="com.foundation.domain.User" alias="User"></typeAlias>
+		<typeAlias type="com.foundation.domain.Mobile" alias="Mobile"></typeAlias>
+	</typeAliases>	
+	
+	<environments default="development">
+		<environment id="development">
+			<transactionManager type="JDBC"/>
+			<dataSource type="JNDI">
+                <property name="data_source" value="java:/comp/env/employeejndi"/>
+            </dataSource>
+		</environment>
+	</environments>
+	
+	<mappers>
+	 	<mapper resource="com/foundation/sqlmap/EmployeeMapper.xml" />
+	 	<mapper resource="com/foundation/sqlmap/UserMapper.xml" />
+	</mappers>
+	
+</configuration>
